@@ -1,3 +1,13 @@
+<?php
+    session_start();    // Iniciar a sessão
+    
+    // Inicio da sessão
+    if( !isset($_SESSION['nome_user']) && ($_SERVER['REQUEST_URI']) != '/login.php') {     // Verificar se o usuário está logado
+        header('Location: login.php');                                                      // Redirecionar para a página de login
+        exit();                                                                                     // Finalizar o script
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +25,9 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
     <link href="css/nprogress.css" rel="stylesheet">
+
+    <!-- Animate.css - LOGIN.PHP -->
+    <link href="css/animate.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="css/custom.css" rel="stylesheet">
