@@ -1,7 +1,11 @@
-<?php 
-    require_once 'header.php'; 
+<?php
+    session_start();                            // Iniciar a sessão para saber se o usuário já está logado
+    if (isset($_SESSION['login'])) {            // Usuário já autenticado: não precisa ver o formulário de login
+        header('Location: index.php');          // Redirecionar para a página protegida
+        exit();                                 // Finalizar o script
+    }
+    require_once 'config/header.php';           // header.php já imprime <!DOCTYPE>, <html> e <head>
 ?>
-<html lang="en">
   <body class="login">
     <div>
       <a class="hiddenanchor" id="signup"></a>
@@ -12,6 +16,9 @@
           <section class="login_content">
             <form name="form_login" action="acesso.php" method="POST">
               <h1>Login PHP</h1>
+              <?php if (isset($_GET['erro'])): ?>
+              <div class="alert alert-danger" role="alert">Usuário ou senha inválidos.</div>
+              <?php endif; ?>
               <div>
                 <input type="text" name="username" class="form-control" placeholder="Username" required="" />
               </div>
@@ -20,7 +27,7 @@
               </div>
               <div>
                 <input type="submit" class="btn btn-default submit" value="Entrar"/>
-                <a class="reset_pass" href="#">Esqueceu a sua senha?</a
+                <a class="reset_pass" href="#">Esqueceu a sua senha?</a>
               </div>
 
               <div class="clearfix"></div>
