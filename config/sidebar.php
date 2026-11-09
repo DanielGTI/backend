@@ -13,7 +13,7 @@
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
-                            <h2><?= htmlspecialchars($_SESSION['nome_user'] ?? '') ?></h2>
+                            <h2><?= htmlspecialchars($auth->nomeUsuario()) ?></h2>
                         </div>
                         <div class="clearfix"></div>
                     </div>

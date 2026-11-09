@@ -1,13 +1,14 @@
 <?php
-    if (session_status() === PHP_SESSION_NONE) {    // Só inicia a sessão se ainda não houver uma (login.php já pode tê-la iniciado)
-        session_start();                            // Iniciar a sessão
-    }
+    require_once __DIR__ . '/autoload.php';         // Habilita o uso das classes (pasta classes/)
 
-    // Inicio da sessão
+    // Se a página que incluiu o header (ex.: login.php) já criou o $auth, reaproveita; senão cria um novo.
+    // O $auth fica disponível também para sidebar.php e top.php, que são incluídos depois.
+    $auth = $auth ?? new Autenticacao();
+
+    // Páginas protegidas exigem login; só o login.php é livre.
     // basename($_SERVER['SCRIPT_NAME']): compara só o nome do script em vez de REQUEST_URI, que falhava com query string (login.php?erro=1) ou subpasta
-    if( !isset($_SESSION['nome_user']) && basename($_SERVER['SCRIPT_NAME']) !== 'login.php') {     // Verificar se o usuário está logado
-        header('Location: login.php');                                                      // Redirecionar para a página de login
-        exit();                                                                                     // Finalizar o script
+    if (basename($_SERVER['SCRIPT_NAME']) !== 'login.php') {
+        $auth->exigirLogin();                       // Não logado: redireciona para o login.php
     }
 ?>
 

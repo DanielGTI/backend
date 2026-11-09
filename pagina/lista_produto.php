@@ -1,3 +1,8 @@
+<?php
+    // O repositório busca os produtos; cada item da lista é um objeto Produto
+    $repositorio = new ProdutoRepositorio();
+    $produtos    = $repositorio->listar();
+?>
                     <!-- page content -->
                     <div class="col-lg-12 col-md-12 right_col" role="main">
                         <div class="">
@@ -60,13 +65,14 @@
                         </tr>
                       </thead>
                       <tbody>
+                        <?php foreach ($produtos as $produto): ?>
                         <tr>
-                          <th scope="row">1</th>
-                          <td>Apple</td>
-                          <td>iPhone 17</td>
-                          <td>32GB</td>
+                          <th scope="row"><?= $produto->getId() ?></th>
+                          <td><?= htmlspecialchars($produto->getMarca()) ?></td>
+                          <td><?= htmlspecialchars($produto->getModelo()) ?></td>
+                          <td><?= htmlspecialchars($produto->getRam()) ?></td>
                           <td>
-                            <a href="produto_unitario.php?id=1" class="btn btn-info btn-sm" title="Editar">
+                            <a href="produto_unitario.php?id=<?= $produto->getId() ?>" class="btn btn-info btn-sm" title="Editar">
                               <i class="fa fa-edit"></i> Editar
                             </a>
                             <button class="btn btn-danger btn-sm" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
@@ -74,34 +80,7 @@
                             </button>
                           </td>
                         </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Samsung</td>
-                          <td>Galaxy S25</td>
-                          <td>8GB</td>
-                          <td>
-                            <a href="produto_unitario.php?id=2" class="btn btn-info btn-sm" title="Editar">
-                              <i class="fa fa-edit"></i> Editar
-                            </a>
-                            <button class="btn btn-danger btn-sm" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
-                              <i class="fa fa-trash"></i> Excluir
-                            </button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Motorola</td>
-                          <td>G10</td>
-                          <td>8GB</td>
-                          <td>
-                            <a href="produto_unitario.php?id=3" class="btn btn-info btn-sm" title="Editar">
-                              <i class="fa fa-edit"></i> Editar
-                            </a>
-                            <button class="btn btn-danger btn-sm" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
-                              <i class="fa fa-trash"></i> Excluir
-                            </button>
-                          </td>
-                        </tr>
+                        <?php endforeach; ?>
                       </tbody>
                     </table>
 

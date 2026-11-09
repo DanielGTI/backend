@@ -1,8 +1,9 @@
 <?php
     // Busca o produto pelo id recebido na URL (produto_unitario.php?id=1)
-    $produtos = require __DIR__ . '/../config/produtos.php';
-    $id       = (int) ($_GET['id'] ?? 0);
-    $produto  = $produtos[$id] ?? null;
+    // O repositório devolve um objeto Produto, ou null se o id não existir.
+    $repositorio = new ProdutoRepositorio();
+    $id          = (int) ($_GET['id'] ?? 0);
+    $produto     = $repositorio->buscar($id);
 
     // Mensagens de erro enviadas por processar_edicao.php (separadas por "|")
     $erros = [];
@@ -10,8 +11,9 @@
         $erros = explode('|', $_GET['erros']);
     }
 
-    $opcoes_ram = ['2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB'];
-    $opcoes_armazenamento = ['32GB', '64GB', '128GB', '256GB', '512GB', '1TB'];
+    // As opções dos <select> ficam como constantes dentro da classe Produto
+    $opcoes_ram           = Produto::OPCOES_RAM;
+    $opcoes_armazenamento = Produto::OPCOES_ARMAZENAMENTO;
 ?>
                     <!-- page content -->
                     <div class="col-lg-12 col-md-12 right_col" role="main">
@@ -81,7 +83,7 @@
                                                     <label class="col-form-label col-md-3 col-sm-3 label-align" for="marca">Marca <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <input type="text" id="marca" name="marca" required="required" class="form-control" value="<?= htmlspecialchars($produto['marca']) ?>">
+                                                        <input type="text" id="marca" name="marca" required="required" class="form-control" value="<?= htmlspecialchars($produto->getMarca()) ?>">
                                                     </div>
                                                 </div>
 
@@ -89,7 +91,7 @@
                                                     <label class="col-form-label col-md-3 col-sm-3 label-align" for="modelo">Modelo <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <input type="text" id="modelo" name="modelo" required="required" class="form-control" value="<?= htmlspecialchars($produto['modelo']) ?>">
+                                                        <input type="text" id="modelo" name="modelo" required="required" class="form-control" value="<?= htmlspecialchars($produto->getModelo()) ?>">
                                                     </div>
                                                 </div>
 
@@ -100,7 +102,7 @@
                                                         <select class="form-control" id="ram" name="ram" required="required">
                                                             <option value="">Selecione a RAM</option>
                                                             <?php foreach ($opcoes_ram as $opcao): ?>
-                                                            <option value="<?= $opcao ?>"<?= $produto['ram'] === $opcao ? ' selected' : '' ?>><?= $opcao ?></option>
+                                                            <option value="<?= $opcao ?>"<?= $produto->getRam() === $opcao ? ' selected' : '' ?>><?= $opcao ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
@@ -110,7 +112,7 @@
                                                     <label class="col-form-label col-md-3 col-sm-3 label-align" for="data_lancamento">Data de Lançamento <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <input type="date" id="data_lancamento" name="data_lancamento" required="required" class="form-control" value="<?= htmlspecialchars($produto['data_lancamento']) ?>">
+                                                        <input type="date" id="data_lancamento" name="data_lancamento" required="required" class="form-control" value="<?= htmlspecialchars($produto->getDataLancamento()) ?>">
                                                     </div>
                                                 </div>
 
@@ -118,7 +120,7 @@
                                                     <label class="col-form-label col-md-3 col-sm-3 label-align" for="cameras">Câmeras <span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <input type="text" id="cameras" name="cameras" required="required" class="form-control" value="<?= htmlspecialchars($produto['cameras']) ?>" placeholder="Ex: Tripla: 48MP + 12MP + 12MP">
+                                                        <input type="text" id="cameras" name="cameras" required="required" class="form-control" value="<?= htmlspecialchars($produto->getCameras()) ?>" placeholder="Ex: Tripla: 48MP + 12MP + 12MP">
                                                     </div>
                                                 </div>
 
@@ -129,7 +131,7 @@
                                                         <select class="form-control" id="armazenamento" name="armazenamento" required="required">
                                                             <option value="">Selecione o Armazenamento</option>
                                                             <?php foreach ($opcoes_armazenamento as $opcao): ?>
-                                                            <option value="<?= $opcao ?>"<?= $produto['armazenamento'] === $opcao ? ' selected' : '' ?>><?= $opcao ?></option>
+                                                            <option value="<?= $opcao ?>"<?= $produto->getArmazenamento() === $opcao ? ' selected' : '' ?>><?= $opcao ?></option>
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
@@ -139,7 +141,7 @@
                                                     <label class="col-form-label col-md-3 col-sm-3 label-align" for="descricao">Descrição
                                                     </label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <textarea id="descricao" name="descricao" class="form-control" rows="3" placeholder="Descrição opcional do produto"><?= htmlspecialchars($produto['descricao']) ?></textarea>
+                                                        <textarea id="descricao" name="descricao" class="form-control" rows="3" placeholder="Descrição opcional do produto"><?= htmlspecialchars($produto->getDescricao()) ?></textarea>
                                                     </div>
                                                 </div>
 

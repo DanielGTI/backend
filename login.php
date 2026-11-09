@@ -1,6 +1,8 @@
 <?php
-    session_start();                            // Iniciar a sessão para saber se o usuário já está logado
-    if (isset($_SESSION['login'])) {            // Usuário já autenticado: não precisa ver o formulário de login
+    require_once 'config/autoload.php';         // Habilita o uso das classes (pasta classes/)
+
+    $auth = new Autenticacao();                 // Cria o objeto de login (já inicia a sessão)
+    if ($auth->estaLogado()) {                  // Usuário já autenticado: não precisa ver o formulário de login
         header('Location: index.php');          // Redirecionar para a página protegida
         exit();                                 // Finalizar o script
     }
