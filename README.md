@@ -419,26 +419,6 @@ Testei o projeto da branch `php-03` de ponta a ponta: login certo e errado, bloq
 - **Pastas organizadas** e comentários em português nos pontos importantes.
 - **nginx bloqueando** o acesso direto a `config/` e `pagina/`.
 
-### ⚠️ Pontos de atenção
-
-Nenhum deles é um defeito grave para uma aula, mas todos são **boas oportunidades de aprendizado**.
-
-| # | Ponto | Por que importa | Caminho para melhorar |
-|---|---|---|---|
-| 1 | **Os dados dos produtos estão em dois lugares.** A tabela em `lista_produto.php` tem as linhas escritas à mão em HTML, enquanto a edição lê `config/produtos.php`. | Se alguém alterar um e esquecer o outro, a lista e a edição mostram dados diferentes. | Montar a tabela com um `foreach` sobre o array. |
-| 2 | **O "Salvar" não salva e o "Excluir" não faz nada.** O salvar só simula e redireciona; o excluir só abre uma confirmação. | A tela dá a impressão de que funciona. | Banco de dados e um CRUD completo. |
-| 3 | **A pasta `.git/` e arquivos como `docker-compose.yml` e `default.conf` parecem acessíveis pelo navegador.** O nginx serve tudo que está em `/var/www/html`, e só `config/` e `pagina/` foram bloqueados. | Quem acessar `localhost:8086/.git/config` poderia baixar o histórico do código. Em produção seria grave. *(Pela configuração; não consegui subir o Docker aqui para confirmar.)* | Bloquear arquivos que começam com ponto no `default.conf`, ou servir só a pasta `public/`. |
-| 4 | **Usuário e senha fixos no código** (`admin` / `123`), comparados em texto puro. | Qualquer pessoa que lê o código sabe a senha. | Usuários no banco e `password_hash` / `password_verify`. |
-| 5 | **A checagem de login é feita de três jeitos.** O `header.php` testa `nome_user`; o `login.php` e o `processar_edicao.php` testam `login`. | Funciona porque os dois são gravados juntos, mas confunde e pode dar defeito se um dia mudar. | Concentrar a regra em um só lugar (uma função ou classe). |
-| 6 | **O formulário "Criar Conta" é só visual.** O botão "Enviar" aponta para `index.html`, arquivo removido na Fase 1. | O cadastro não faz nada. | Implementar o cadastro, ou remover a tela. |
-| 7 | **Mensagens e erros viajam pela URL** (`?mensagem=...`, `?erros=...`). | O `htmlspecialchars` impede o ataque de script, mas qualquer pessoa pode montar um link com **um texto qualquer** que aparece na sua tela. | Guardar a mensagem na sessão e apagá-la depois de mostrar (*flash message*). |
-| 8 | **Ao dar erro de validação, o formulário volta com os dados antigos**, não com o que o usuário digitou. | O usuário perde o que escreveu. | Devolver os valores digitados ao formulário. |
-| 9 | **Sair é um link comum** (`logout.php`) e os formulários não têm token. | Outro site poderia disparar essas ações em nome do usuário (ataque CSRF). | Logout por `POST` e token CSRF nos formulários. |
-| 10 | **Sobras do template.** Menu com "General Elements" e "Tables", mensagens falsas de "John Smith", título "Plain Page", campo de busca sem função. | Confunde quem está aprendendo. | Limpar ou trocar pelo conteúdo real. |
-| 11 | **As três páginas casca repetem a mesma estrutura.** | Mudar o layout exige editar três arquivos. | Um arquivo de layout único ou classes. |
-
-A **Fase 4** (branch `php-04`) dá o próximo passo: reorganiza o código com **Programação Orientada a Objetos**, que é a resposta natural para os pontos 5 e 11.
-
 ---
 
 ## 10. Teste você mesmo
