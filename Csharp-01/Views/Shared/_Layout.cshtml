@@ -7,13 +7,10 @@
 @*
     _Layout.cshtml - o MOLDE do painel (menu lateral + barra do topo + rodapé).
 
-    Na versão PHP, cada tela repetia este esqueleto e montava as peças com require_once:
-        require_once 'config/sidebar.php'; require_once 'config/top.php'; ...
-    No MVC o esqueleto fica em UM lugar só. Cada view escreve apenas o seu miolo, que é
-    encaixado no lugar do @RenderBody(). Por isso não existem mais as "cascas"
-    (produto.php, produto_unitario.php) separadas das "páginas" (pagina/*.php).
+    O esqueleto da página fica em UM lugar só. Cada view escreve apenas o seu miolo,
+    que é encaixado no lugar do @RenderBody(). Assim, mudar o menu aqui muda todas as telas.
 
-    <partial name="..."/> inclui um pedaço de tela reaproveitável (PHP: require_once).
+    <partial name="..."/> inclui um pedaço de tela reaproveitável (uma "partial view").
 *@
 <body class="nav-md">
     <div class="body">

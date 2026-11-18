@@ -1,5 +1,5 @@
 @*
-    Views/Acesso/Login.cshtml - tela de login (PHP: login.php).
+    Views/Acesso/Login.cshtml - tela de login.
 
     @model LoginViewModel = esta view recebe um objeto LoginViewModel do Controller.
     Layout = "_LayoutLogin" = usa o molde SEM menu lateral.
@@ -30,7 +30,7 @@
                     <h1>Login C#</h1>
 
                     @* O erro adicionado no Controller (ModelState.AddModelError) aparece aqui.
-                       PHP: if (isset($_GET['erro'])) *@
+                       O bloco só é exibido quando o ModelState tem algum erro. *@
                     @if (!ViewData.ModelState.IsValid)
                     {
                         <div class="alert alert-danger" role="alert">
@@ -72,7 +72,7 @@
             </section>
         </div>
 
-        @* Painel "Criar Conta": apenas visual, como no PHP (ainda não faz nada). *@
+        @* Painel "Criar Conta": apenas visual (ainda não faz nada). *@
         <div id="register" class="animate form registration_form">
             <section class="login_content">
                 <form>

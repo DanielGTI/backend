@@ -3,7 +3,7 @@ using Csharp_01.Models;
 namespace Csharp_01.Services
 {
     /// <summary>
-    /// Repositório EM MEMÓRIA, com os mesmos dados de exemplo do config/produtos.php (versão PHP).
+    /// Repositório EM MEMÓRIA, com 3 produtos de exemplo (iPhone 17, Galaxy S25 e Moto G10).
     /// Ainda não existe banco de dados: a lista abaixo é recriada toda vez que a aplicação inicia.
     /// </summary>
     public class ProdutoRepositorio : IProdutoRepositorio
@@ -35,7 +35,7 @@ namespace Csharp_01.Services
 
         public IReadOnlyList<Produto> ObterTodos() => _produtos;
 
-        // FirstOrDefault devolve null quando não acha (PHP: $produtos[$id] ?? null)
+        // FirstOrDefault (LINQ) devolve null quando nenhum produto tem o id pedido
         public Produto? ObterPorId(int id) => _produtos.FirstOrDefault(p => p.Id == id);
     }
 }

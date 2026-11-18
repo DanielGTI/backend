@@ -1,18 +1,18 @@
 # Csharp-01: Painel Gentelella em ASP.NET Core MVC (.NET 8)
 
-Projeto didático feito no **Visual Studio Community 2022**.
+Projeto didático feito em **C#** com **ASP.NET Core MVC**, no **Visual Studio Community 2022**.
 
-É a versão **C#** do projeto que na branch `php-03` foi feito em **PHP puro**. Ela reproduz as mesmas funcionalidades, agora com o padrão **MVC** e o template administrativo **Gentelella** (Bootstrap):
+Ele usa o template administrativo **Gentelella** (Bootstrap) como visual e implementa:
 
 | Funcionalidade | Como funciona |
 |---|---|
 | **Login com sessão** | Usuário `admin`, senha `123`. Quem não está logado é mandado para o login. |
-| **Sidebar ajustada** | Menu lateral com Principal, Produto, Cliente, Vendas, Relatórios e Configurações, mostrando o **nome do usuário logado**. |
+| **Sidebar** | Menu lateral com Principal, Produto, Cliente, Vendas, Relatórios e Configurações, mostrando o **nome do usuário logado**. |
 | **Lista de produtos** | Tabela com iPhone 17, Galaxy S25 e Moto G10. |
 | **Edição de produto** | Formulário preenchido, com **validação** e mensagem de sucesso. |
 | **Logout** | Encerra a sessão e volta para o login. |
 
-> **Ainda não há banco de dados.** Os produtos ficam numa lista em memória, como o array do PHP. A edição é uma **simulação**: valida e avisa que deu certo, mas não grava nada (igual ao PHP).
+> **Ainda não há banco de dados.** Os produtos ficam numa lista em memória. A edição é uma **simulação**: valida e avisa que deu certo, mas não grava nada.
 
 ---
 
@@ -20,17 +20,18 @@ Projeto didático feito no **Visual Studio Community 2022**.
 
 1. [O que é MVC](#1-o-que-é-mvc)
 2. [Como rodar no Visual Studio](#2-como-rodar-no-visual-studio)
-3. [Estrutura de pastas](#3-estrutura-de-pastas)
-4. [Do PHP para o C#: tabela de equivalências](#4-do-php-para-o-c-tabela-de-equivalências)
-5. [Como uma requisição percorre o projeto](#5-como-uma-requisição-percorre-o-projeto)
-6. [O fluxo do login](#6-o-fluxo-do-login)
-7. [O fluxo da edição (Post/Redirect/Get)](#7-o-fluxo-da-edição-postredirectget)
-8. [Conceitos-chave explicados](#8-conceitos-chave-explicados)
-9. [Segurança: o que foi feito e o que falta](#9-segurança-o-que-foi-feito-e-o-que-falta)
-10. [Roteiro de testes](#10-roteiro-de-testes)
-11. [Limitações conhecidas](#11-limitações-conhecidas)
-12. [Exercícios e próximos passos](#12-exercícios-e-próximos-passos)
-13. [Glossário](#13-glossário)
+3. [Como o projeto foi criado, passo a passo](#3-como-o-projeto-foi-criado-passo-a-passo)
+4. [Estrutura de pastas](#4-estrutura-de-pastas)
+5. [Onde fica cada funcionalidade](#5-onde-fica-cada-funcionalidade)
+6. [Como uma requisição percorre o projeto](#6-como-uma-requisição-percorre-o-projeto)
+7. [O fluxo do login](#7-o-fluxo-do-login)
+8. [O fluxo da edição (Post/Redirect/Get)](#8-o-fluxo-da-edição-postredirectget)
+9. [Conceitos-chave explicados](#9-conceitos-chave-explicados)
+10. [Segurança: o que foi feito e o que falta](#10-segurança-o-que-foi-feito-e-o-que-falta)
+11. [Roteiro de testes](#11-roteiro-de-testes)
+12. [Limitações conhecidas](#12-limitações-conhecidas)
+13. [Exercícios e próximos passos](#13-exercícios-e-próximos-passos)
+14. [Glossário](#14-glossário)
 
 ---
 
@@ -46,9 +47,9 @@ Projeto didático feito no **Visual Studio Community 2022**.
 
 Uma analogia: num restaurante, o **Controller** é o garçom (recebe o pedido e coordena), o **Model** é a cozinha e a receita (os dados e as regras) e a **View** é o prato que chega à mesa.
 
-No PHP, cada arquivo misturava os três papéis: o `produto_unitario.php` buscava dados, validava e montava HTML. No MVC cada papel fica em seu lugar, e isso facilita manter e crescer o sistema.
+Separar os papéis facilita manter e crescer o sistema: quem mexe na tela não precisa mexer nas regras, e vice-versa.
 
-> **Observação.** Antes desta versão, o projeto usava *Razor Pages* (cada página com um `.cshtml` e um `.cshtml.cs`). Agora usa **MVC clássico**, com Controllers separados das Views. Os dois modelos fazem parte do ASP.NET Core; esta versão usa MVC para espelhar a organização da versão PHP.
+> O ASP.NET Core também oferece o modelo *Razor Pages* (cada página com um `.cshtml` e um `.cshtml.cs`). Este projeto usa o **MVC clássico**, com Controllers separados das Views.
 
 ---
 
@@ -58,6 +59,8 @@ No PHP, cada arquivo misturava os três papéis: o `produto_unitario.php` buscav
 
 - **Visual Studio Community 2022** com a carga de trabalho **"ASP.NET e desenvolvimento para a Web"**.
 - **.NET 8 SDK** (já vem com a carga de trabalho acima).
+
+> Para conferir ou instalar a carga de trabalho: abra o **Visual Studio Installer**, clique em **Modificar** no Visual Studio Community e marque "ASP.NET e desenvolvimento para a Web".
 
 ### Passo a passo
 
@@ -88,7 +91,46 @@ O endereço aparece no terminal (perfil `http`: `http://localhost:5158`).
 
 ---
 
-## 3. Estrutura de pastas
+## 3. Como o projeto foi criado, passo a passo
+
+Use esta sequência para entender a ordem em que as peças foram montadas (ou para refazer o projeto do zero).
+
+### 3.1 Criar o projeto
+
+1. No Visual Studio, escolha **Criar um projeto**.
+2. Procure e selecione **Aplicativo Web ASP.NET Core (Model-View-Controller)** (linguagem C#). Clique em **Avançar**.
+3. Em **Nome do projeto**, digite `Csharp-01`. Escolha a pasta e clique em **Avançar**.
+4. Na tela de informações adicionais, use:
+   - **Estrutura:** .NET 8.0
+   - **Tipo de autenticação:** Nenhum
+   - **Configurar para HTTPS:** marcado
+5. Clique em **Criar** e pressione **F5** para ver o site de exemplo funcionando.
+
+O modelo já cria as pastas `Controllers`, `Models` e `Views`, o `Program.cs` e a pasta `wwwroot`. A partir daqui, construímos em cima dele.
+
+### 3.2 Montar o projeto
+
+| Passo | O que fazer | Onde |
+|---|---|---|
+| 1 | Copiar o CSS, JS, fontes e imagens do template **Gentelella** | `wwwroot/css`, `js`, `fonts`, `images` |
+| 2 | Quebrar o HTML do template em **partials** (head, sidebar, topo, rodapé, scripts) e criar os layouts | `Views/Shared/` |
+| 3 | Criar os **Models** (`Produto`, `LoginViewModel`) com as regras de validação | `Models/` |
+| 4 | Criar a interface e o **repositório** em memória, com os 3 produtos de exemplo | `Services/` |
+| 5 | Ligar a **sessão** e registrar o repositório (injeção de dependência) | `Program.cs` |
+| 6 | Criar o **filtro** `[SessaoObrigatoria]` (o guarda de login) | `Filters/` |
+| 7 | Criar os **Controllers**: `Acesso`, `Home`, `Produto` e `Erro` | `Controllers/` |
+| 8 | Criar as **Views** de cada Action (login, dashboard, lista, edição, erro) | `Views/` |
+| 9 | Testar com o [roteiro de testes](#11-roteiro-de-testes) | |
+
+**Dicas do Visual Studio:**
+
+- **Novo Controller:** botão direito em `Controllers` → **Adicionar** → **Controlador** → **Controlador MVC - Vazio**.
+- **Nova View:** botão direito dentro de um método de Action → **Adicionar View** → **Razor View - Vazia**. O Visual Studio cria o arquivo na pasta certa, com o nome certo.
+- Remova o que o modelo gera e não usamos (por exemplo, a página *Privacy* de exemplo e o `ErrorViewModel`).
+
+---
+
+## 4. Estrutura de pastas
 
 ```
 backend/
@@ -137,43 +179,30 @@ backend/
 Duas regras para memorizar:
 
 - **`Views/`** é processado pelo servidor (HTML + C#). O navegador nunca acessa esses arquivos diretamente.
-- **`wwwroot/`** é entregue **como está** ao navegador. É o equivalente da pasta `public/` do PHP. Por isso o caminho `~/css/custom.css` aponta para `wwwroot/css/custom.css`.
+- **`wwwroot/`** é entregue **como está** ao navegador. Por isso o caminho `~/css/custom.css` aponta para `wwwroot/css/custom.css`. O `~/` significa "a raiz do site" e funciona em qualquer URL.
 
 ---
 
-## 4. Do PHP para o C#: tabela de equivalências
+## 5. Onde fica cada funcionalidade
 
-Quem fez a versão PHP vai reconhecer cada peça:
-
-| PHP (`php-03`) | C# (`csharp-02`) | Observação |
-|---|---|---|
-| `index.php` + `pagina/home.php` | `HomeController.Index` + `Views/Home/Index.cshtml` | Dashboard |
-| `login.php` | `AcessoController.Login` (GET) + `Views/Acesso/Login.cshtml` | Mostra o formulário |
-| `acesso.php` | `AcessoController.Login` (POST) | Confere usuário e senha |
-| `logout.php` | `AcessoController.Logout` | Encerra a sessão |
-| `produto.php` + `pagina/lista_produto.php` | `ProdutoController.Index` + `Views/Produto/Index.cshtml` | Lista |
-| `produto_unitario.php` + `pagina/editar_produto.php` | `ProdutoController.Editar` (GET) + `Views/Produto/Editar.cshtml` | Formulário |
-| `processar_edicao.php` | `ProdutoController.Editar` (POST) | Valida e redireciona |
-| `config/produtos.php` (array) | `Services/ProdutoRepositorio.cs` | Dados de exemplo |
-| `config/header.php` (`<head>` + guarda) | `Views/Shared/_Head.cshtml` + `[SessaoObrigatoria]` | O guarda virou um atributo |
-| `config/sidebar.php` | `Views/Shared/_Sidebar.cshtml` | Menu |
-| `config/top.php` | `Views/Shared/_Top.cshtml` | Barra do topo |
-| `config/footer.php` / `config/scripts.php` | `_Footer.cshtml` / `_Scripts.cshtml` | |
-| `require_once 'config/x.php'` | `<partial name="_X" />` | Incluir um pedaço de tela |
-| "Cascas" (`produto.php`...) que montam a página | `_Layout.cshtml` + `@RenderBody()` | O molde existe **uma vez só** |
-| `session_start()` / `$_SESSION['x']` | `AddSession()` / `HttpContext.Session` | Sessão |
-| `$_POST['marca']` | Model Binding (`Produto.Marca`) | Preenchimento automático |
-| `$_GET['id']` | Parâmetro `int id` da Action | A URL fica `/Produto/Editar/2` |
-| `htmlspecialchars()` | `@variavel` no Razor | Já escapa o HTML automaticamente |
-| `header('Location: x'); exit();` | `return RedirectToAction(...)` | Redirecionar |
-| `if (empty($marca)) $erros[] = ...` | `[Required(ErrorMessage = ...)]` | Validação declarativa |
-| `?mensagem=...` na URL | `TempData["Mensagem"]` | Mensagem de sucesso |
-| `public/` | `wwwroot/` | Arquivos estáticos |
-| `default.conf` bloqueando `/config/` | Não é necessário | As Views **nunca** são servidas direto pelo navegador |
+| Funcionalidade | Controller / Action | View | Outras peças |
+|---|---|---|---|
+| Dashboard | `HomeController.Index` | `Views/Home/Index.cshtml` | |
+| Mostrar o login | `AcessoController.Login` (GET) | `Views/Acesso/Login.cshtml` | `LoginViewModel`, `_LayoutLogin` |
+| Conferir usuário e senha | `AcessoController.Login` (POST) | volta ao login se errar | Sessão |
+| Logout | `AcessoController.Logout` | | Sessão |
+| Proteger as telas | `[SessaoObrigatoria]` nos Controllers | | `Filters/SessaoObrigatoriaAttribute.cs` |
+| Lista de produtos | `ProdutoController.Index` | `Views/Produto/Index.cshtml` | `IProdutoRepositorio` |
+| Formulário de edição | `ProdutoController.Editar` (GET) | `Views/Produto/Editar.cshtml` | `Produto` |
+| Validar e "salvar" | `ProdutoController.Editar` (POST) | volta ao formulário se houver erro | `[Required]`, `ModelState`, `TempData` |
+| Dados dos produtos | | | `Services/ProdutoRepositorio.cs` |
+| Menu lateral | | `Views/Shared/_Sidebar.cshtml` | Nome do usuário vem da sessão |
+| Barra superior | | `Views/Shared/_Top.cshtml` | Link "Log Out" |
+| Molde das telas | | `Views/Shared/_Layout.cshtml` | `@RenderBody()` + partials |
 
 ---
 
-## 5. Como uma requisição percorre o projeto
+## 6. Como uma requisição percorre o projeto
 
 Exemplo: o usuário já logado abre `https://localhost:7121/Produto`.
 
@@ -212,7 +241,7 @@ Navegador                         Servidor (ASP.NET Core)
 
 ---
 
-## 6. O fluxo do login
+## 7. O fluxo do login
 
 ```
  Navegador                                    Servidor
@@ -260,7 +289,7 @@ O `AcessoController` **não** tem esse atributo. Se tivesse, a tela de login exi
 
 ---
 
-## 7. O fluxo da edição (Post/Redirect/Get)
+## 8. O fluxo da edição (Post/Redirect/Get)
 
 ```
  1. GET /Produto/Editar/2                    ProdutoController.Editar(2)
@@ -284,7 +313,7 @@ O `AcessoController` **não** tem esse atributo. Se tivesse, a tela de login exi
 public string Marca { get; set; } = string.Empty;
 ```
 
-No PHP eram vários `if (empty(...))`. Aqui o ASP.NET aplica as regras sozinho. No Controller basta perguntar:
+Os atributos entre colchetes (*Data Annotations*) declaram a regra, e o ASP.NET a aplica sozinho. No Controller basta perguntar:
 
 ```csharp
 if (!ModelState.IsValid)
@@ -297,9 +326,9 @@ if (!ModelState.IsValid)
 
 ---
 
-## 8. Conceitos-chave explicados
+## 9. Conceitos-chave explicados
 
-### 8.1 Sessão
+### 9.1 Sessão
 
 O servidor não "lembra" quem você é entre uma página e outra, porque o HTTP não guarda estado. A **sessão** resolve isso: é uma "gaveta" no servidor ligada ao seu navegador por um **cookie**.
 
@@ -311,7 +340,7 @@ HttpContext.Session.Clear();                           // esvazia (logout)
 
 Ela precisa ser **ligada no `Program.cs`** em dois lugares: `AddSession()` (serviço) e `app.UseSession()` (pipeline, depois de `UseRouting`).
 
-### 8.2 Injeção de dependência (DI)
+### 9.2 Injeção de dependência (DI)
 
 O `ProdutoController` precisa de um repositório, mas **não o cria**. Ele o pede no construtor:
 
@@ -330,11 +359,11 @@ builder.Services.AddSingleton<IProdutoRepositorio, ProdutoRepositorio>();
 
 **Vantagem:** quando o banco de dados entrar, criamos `ProdutoRepositorioSql` e trocamos **só essa linha**. Nenhum Controller muda.
 
-### 8.3 Model Binding
+### 9.3 Model Binding
 
-O ASP.NET lê os campos do formulário e preenche o objeto sozinho, pelos **nomes**. O campo `name="Marca"` vira `produto.Marca`. É o equivalente automático do `$_POST['marca']`.
+O ASP.NET lê os campos do formulário e preenche o objeto sozinho, pelos **nomes**. O campo `name="Marca"` vira `produto.Marca`. Você não precisa ler campo por campo.
 
-### 8.4 Tag Helpers
+### 9.4 Tag Helpers
 
 Atributos `asp-*` que o servidor transforma em HTML comum:
 
@@ -346,15 +375,15 @@ Atributos `asp-*` que o servidor transforma em HTML comum:
 | `<select asp-for="Ram" asp-items="...">` | `<select>` com as `<option>` e a atual já `selected` |
 | `<form asp-action="Editar" method="post">` | `<form action="/Produto/Editar">` + **token anti-CSRF** |
 
-Se a rota mudar, os links se corrigem sozinhos. No PHP eram escritos à mão (`href="produto.php"`).
+Se a rota mudar, os links se corrigem sozinhos.
 
-### 8.5 Layout e Partials
+### 9.5 Layout e Partials
 
 - `_Layout.cshtml` é o **molde** (menu + topo + rodapé). Cada View escreve só o miolo, que entra no `@RenderBody()`.
 - `_ViewStart.cshtml` diz que todas as Views usam `_Layout`. O Login troca para `_LayoutLogin` com `Layout = "_LayoutLogin";`.
-- `<partial name="_Sidebar" />` inclui um pedaço reutilizável (o `require_once` do PHP).
+- `<partial name="_Sidebar" />` inclui um pedaço reutilizável de tela. O menu existe em **um arquivo só**: mudou ali, mudou em todas as páginas.
 
-### 8.6 Razor
+### 9.6 Razor
 
 O `@` mistura C# e HTML:
 
@@ -367,24 +396,24 @@ O `@` mistura C# e HTML:
 
 `@model Produto` no topo da View diz qual tipo de dado ela recebe do Controller. Dentro dela, `Model` é esse dado.
 
-### 8.7 TempData
+### 9.7 TempData
 
-Guarda um valor para **a próxima requisição** e depois o apaga. Ideal para mensagens de sucesso depois de um redirecionamento. Substitui o `?mensagem=...` do PHP, e a mensagem não aparece na URL.
+Guarda um valor para **a próxima requisição** e depois o apaga. Ideal para mensagens de sucesso depois de um redirecionamento: a mensagem aparece uma vez e não fica na URL.
 
-### 8.8 Nullable (`string` x `string?`)
+### 9.8 Nullable (`string` x `string?`)
 
 O projeto tem `<Nullable>enable</Nullable>`. Com isso, uma propriedade `string` sem `?` é tratada como **obrigatória** pelo ASP.NET. A `Descricao` é opcional, por isso é `string?`.
 
 ---
 
-## 9. Segurança: o que foi feito e o que falta
+## 10. Segurança: o que foi feito e o que falta
 
 ### Já implementado
 
 | Proteção | Onde | O que evita |
 |---|---|---|
 | **Guarda de sessão** | `[SessaoObrigatoria]` | Acessar telas sem login (inclusive os POST) |
-| **Token anti-CSRF** | `[ValidateAntiForgeryToken]` + `<form asp-...>` | Outro site enviar formulários em nome do usuário. O PHP não tinha. |
+| **Token anti-CSRF** | `[ValidateAntiForgeryToken]` + `<form asp-...>` | Outro site enviar formulários em nome do usuário |
 | **Escape de HTML** | Razor (`@x`) | XSS (código malicioso digitado em um campo e executado ao exibir) |
 | **Cookie `HttpOnly`** | `Program.cs` | JavaScript da página ler o cookie de sessão |
 | **Validação no servidor** | `[Required]` + `ModelState` | Dados inválidos mesmo com o `required` do HTML burlado |
@@ -393,13 +422,13 @@ O projeto tem `<Nullable>enable</Nullable>`. Com isso, uma propriedade `string` 
 ### O que NÃO é adequado para produção (é só ensino)
 
 - **Usuário e senha fixos no código** (`admin` / `123`). Num sistema real: banco de dados e **hash** de senha, como no **ASP.NET Core Identity**.
-- **Sessão para autenticar.** O PHP usava `session_regenerate_id(true)` ao logar. O ASP.NET Core não tem um equivalente direto para a `Session`. Em sistemas reais, use **Cookie Authentication** ou **Identity**.
+- **Sessão para autenticar.** A `Session` do ASP.NET Core não oferece um recurso simples para trocar o ID da sessão ao logar (proteção contra *session fixation*). Em sistemas reais, use **Cookie Authentication** ou **Identity**.
 - **Logout por GET** (link simples no menu). O ideal é POST com token, para que outro site não consiga deslogar o usuário.
 - **Sessão em memória.** Se a aplicação reiniciar, todo mundo perde o login.
 
 ---
 
-## 10. Roteiro de testes
+## 11. Roteiro de testes
 
 Use este roteiro depois de rodar o projeto:
 
@@ -419,15 +448,13 @@ Use este roteiro depois de rodar o projeto:
 | 12 | Clicar em **Log Out** (menu do usuário, no topo) | Volta ao login |
 | 13 | Após o logout, abrir `/Produto` | Vai para o login de novo |
 
-> Os fluxos principais (guarda de sessão, login certo e errado, bloqueio sem token CSRF, edição com e sem erros, mensagem exibida uma única vez, produto inexistente, logout e arquivos estáticos) foram testados com requisições HTTP reais contra a aplicação rodando. A conferência **visual** no navegador, dentro do Visual Studio, ainda precisa ser feita por você.
-
 ---
 
-## 11. Limitações conhecidas
+## 12. Limitações conhecidas
 
 1. **Sem banco de dados.** Os dados voltam ao original a cada reinício da aplicação.
-2. **A edição não grava.** Igual ao PHP, só simula. O ponto exato para gravar está comentado em `ProdutoController.Editar` (POST).
-3. **O botão "Excluir"** só mostra a confirmação (como no PHP).
+2. **A edição não grava.** Ela só simula. O ponto exato para gravar está comentado em `ProdutoController.Editar` (POST).
+3. **O botão "Excluir"** só mostra a confirmação.
 4. **Menus Cliente, Vendas, Relatórios e Configurações** têm links `#`. São espaços reservados para as próximas aulas.
 5. **"Criar Conta" e "Esqueceu a sua senha?"** na tela de login são só visuais.
 6. **`bin/` e `obj/` não são versionadas.** O `.gitignore` da raiz ignora os arquivos gerados pela compilação (`bin/`, `obj/`), as preferências pessoais do Visual Studio (`.vs/`, `*.user`), pacotes NuGet, logs, resultados de teste, arquivos de publicação e segredos (`secrets.json`, `.env`, `*.pfx`). Quem clonar o projeto gera tudo de novo ao compilar (F5). O que **continua** versionado: código, Views, `wwwroot/` (inclusive `wwwroot/lib`), `launchSettings.json` e `appsettings.json`.
@@ -436,7 +463,7 @@ Use este roteiro depois de rodar o projeto:
 
 ---
 
-## 12. Exercícios e próximos passos
+## 13. Exercícios e próximos passos
 
 1. **Fácil:** mude a senha em `AcessoController` e teste o login. Depois mude o texto do título "Login C#".
 2. **Fácil:** em `Produto.cs`, adicione `[StringLength(50)]` na `Marca` e veja o erro aparecer ao digitar um texto longo.
@@ -448,7 +475,7 @@ Use este roteiro depois de rodar o projeto:
 
 ---
 
-## 13. Glossário
+## 14. Glossário
 
 | Termo | Explicação |
 |---|---|

@@ -1,14 +1,14 @@
 @*
-    Views/Produto/Editar.cshtml - formulário de edição (PHP: produto_unitario.php + pagina/editar_produto.php).
+    Views/Produto/Editar.cshtml - formulário de edição de produto.
 
     @model Produto? = recebe UM produto. O "?" permite null, que acontece quando o id não existe
     (o Controller devolve View(null)) - nesse caso mostramos "Produto não encontrado".
 
-    TAG HELPERS do formulário (a grande diferença para o PHP):
-      asp-for="Marca"  => gera name="Marca", id="Marca" e value="<valor atual>" automaticamente.
-                          No PHP era:  value="<?= htmlspecialchars($produto['marca']) ?>"
-      <select asp-items> => gera as <option> e já marca como selected a opção igual ao valor atual.
-                          No PHP era um foreach com  $produto['ram'] === $opcao ? ' selected' : ''
+    TAG HELPERS do formulário:
+      asp-for="Marca"  => gera name="Marca", id="Marca" e value="<valor atual>" automaticamente,
+                          já com HTML encode (protege contra XSS).
+      <select asp-items> => gera as <option> a partir de uma lista (SelectList) e já marca como
+                          selected a opção igual ao valor atual.
 *@
 @model Produto?
 @{
@@ -57,8 +57,8 @@
                     <div class="x_content">
                         <br />
 
-                        @* ERROS DE VALIDAÇÃO: o Controller devolve esta view com ModelState preenchido
-                           (PHP: lista vinda de $_GET['erros']). Só aparece se houver erro. *@
+                        @* ERROS DE VALIDAÇÃO: o Controller devolve esta view com o ModelState preenchido.
+                           Este bloco só aparece se houver algum erro. *@
                         @if (!ViewData.ModelState.IsValid)
                         {
                             <div class="alert alert-danger" role="alert">
@@ -84,7 +84,7 @@
                                O token anti-CSRF é inserido automaticamente. *@
                             <form id="editarProdutoForm" asp-controller="Produto" asp-action="Editar" method="post" class="form-horizontal form-label-left">
 
-                                @* Campo escondido: leva o Id do produto no POST (PHP: <input type="hidden" name="id">) *@
+                                @* Campo escondido: leva o Id do produto junto com o POST, para o Controller saber qual produto está sendo editado *@
                                 <input type="hidden" asp-for="Id" />
 
                                 <div class="item form-group">

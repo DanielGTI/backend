@@ -1,8 +1,8 @@
 @*
-    _Head.cshtml - o <head> comum (metas e CSS). Equivale ao config/header.php do PHP,
-    SEM o guarda de login (agora isso é o filtro [SessaoObrigatoria]).
+    _Head.cshtml - o <head> comum (metas e CSS), usado pelos dois layouts.
+    O controle de login NÃO fica aqui: é feito pelo filtro [SessaoObrigatoria].
 
-    "~/" aponta para a pasta wwwroot. No PHP era "public/".
+    "~/" aponta para a pasta wwwroot.
     Ex.: ~/css/bootstrap.min.css  =>  Csharp-01/wwwroot/css/bootstrap.min.css
     Usar "~/" funciona em QUALQUER URL (/, /Produto, /Produto/Editar/2). Já "css/x.css" sem o "~/"
     quebraria nas URLs com subpasta.

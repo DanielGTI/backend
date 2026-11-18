@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Csharp_01.Controllers
 {
     /// <summary>
-    /// Lista e edição de produtos. Junta vários arquivos da versão PHP:
-    ///   produto.php + pagina/lista_produto.php        -> Index
-    ///   produto_unitario.php + pagina/editar_produto.php -> Editar (GET)
-    ///   processar_edicao.php                          -> Editar (POST)
+    /// Lista e edição de produtos. Tem três Actions:
+    ///   Index         mostra a tabela de produtos
+    ///   Editar (GET)  mostra o formulário preenchido
+    ///   Editar (POST) valida os dados e redireciona
     /// </summary>
     [SessaoObrigatoria]
     public class ProdutoController : Controller
@@ -31,7 +31,7 @@ namespace Csharp_01.Controllers
 
         // GET /Produto/Editar/2 - formulário preenchido com o produto de id 2
         // O "2" da URL vira o parâmetro "id" (rota padrão: {controller}/{action}/{id?}).
-        // PHP: $id = (int) ($_GET['id'] ?? 0)  -> aqui o ASP.NET já converte para int sozinho.
+        // O ASP.NET converte o texto da URL para int sozinho (Model Binding).
         [HttpGet]
         public IActionResult Editar(int id)
         {
@@ -49,7 +49,6 @@ namespace Csharp_01.Controllers
         {
             // MODEL BINDING: o ASP.NET montou o objeto "produto" com os campos do formulário
             // e já rodou as validações dos atributos ([Required]...). O resultado está em ModelState.
-            // (PHP: o bloco de "if (empty(...)) $erros[] = ..." do processar_edicao.php)
 
             if (_repositorio.ObterPorId(produto.Id) is null)
             {
@@ -59,16 +58,16 @@ namespace Csharp_01.Controllers
 
             if (!ModelState.IsValid)
             {
-                // COM ERROS: devolve a MESMA tela, já com os erros e com o que o usuário digitou.
-                // (Melhor que o PHP, que recarregava os dados originais e o usuário perdia a digitação.)
+                // COM ERROS: devolve a MESMA tela, já com os erros e com o que o usuário digitou
+                // (o usuário não perde o que escreveu).
                 return View(produto);
             }
 
             // SEM ERROS: aqui entraria o UPDATE no banco de dados.
-            // Por enquanto é só uma simulação, igual ao PHP: nada é gravado.
+            // Por enquanto é só uma simulação: nada é gravado.
 
             // TempData guarda a mensagem para a PRÓXIMA requisição e depois some sozinho.
-            // (PHP: produto.php?mensagem=...  - aqui a mensagem não aparece na URL.)
+            // (A mensagem não aparece na URL, diferente de passá-la por query string.)
             TempData["Mensagem"] = "Produto atualizado com sucesso!";
 
             // Redireciona em vez de mostrar a resposta direto: se o usuário apertar F5,

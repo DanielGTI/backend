@@ -1,10 +1,10 @@
 @*
-    _Sidebar.cshtml - MENU LATERAL (PHP: config/sidebar.php).
+    _Sidebar.cshtml - MENU LATERAL.
 
     Dois pontos para observar:
-    1) O nome do usuário vem da sessão (antes era "John Doe" fixo, herança do template).
+    1) O nome do usuário vem da sessão: Context.Session.GetString(...). O Razor aplica HTML encode no @.
     2) Os links usam TAG HELPERS: asp-controller="Produto" asp-action="Index" vira href="/Produto".
-       Se a rota mudar, o link se corrige sozinho. No PHP era href="produto.php" escrito à mão.
+       Se a rota mudar, o link se corrige sozinho (não é preciso escrever a URL à mão).
        Os links com href="#" são só espaços reservados para as próximas telas.
 *@
 <div class="col-lg-2 col-md-2 left_col">

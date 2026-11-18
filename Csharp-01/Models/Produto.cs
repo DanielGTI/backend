@@ -5,14 +5,13 @@ namespace Csharp_01.Models
     /// <summary>
     /// MODEL de produto (o "M" do MVC): descreve os dados e as REGRAS de validação.
     ///
-    /// Na versão PHP, a validação ficava num monte de "if (empty($marca)) { $erros[] = ... }"
-    /// dentro do processar_edicao.php. Aqui usamos DATA ANNOTATIONS: atributos entre colchetes
-    /// que declaram a regra em cima da propriedade. O ASP.NET aplica tudo sozinho
+    /// A validação é feita com DATA ANNOTATIONS: atributos entre colchetes que declaram
+    /// a regra em cima da propriedade. O ASP.NET aplica tudo sozinho
     /// e preenche o ModelState com os erros.
     /// </summary>
     public class Produto
     {
-        // Listas usadas nos <select> da tela de edição (PHP: $opcoes_ram e $opcoes_armazenamento)
+        // Listas usadas nos <select> da tela de edição
         public static readonly string[] OpcoesRam = { "2GB", "4GB", "6GB", "8GB", "12GB", "16GB", "32GB" };
         public static readonly string[] OpcoesArmazenamento = { "32GB", "64GB", "128GB", "256GB", "512GB", "1TB" };
 

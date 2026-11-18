@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Csharp_01.Controllers
 {
     /// <summary>
-    /// Dashboard (tela inicial). Equivale ao index.php + pagina/home.php do PHP.
+    /// Dashboard (tela inicial).
     ///
     /// [SessaoObrigatoria] em cima da classe = TODAS as Actions daqui exigem login.
     /// </summary>

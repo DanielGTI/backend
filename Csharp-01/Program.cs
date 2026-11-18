@@ -14,11 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 // ---------------------------------------------------------------------
 
 // Habilita o padrão MVC: Controllers (lógica) + Views (telas .cshtml).
-// Na versão PHP, cada tela era um arquivo (produto.php, login.php...).
-// Aqui, quem decide o que mostrar é um Controller.
+// Quem decide o que mostrar a cada pedido é um Controller.
 builder.Services.AddControllersWithViews();
 
-// SESSÃO - equivalente ao session_start() / $_SESSION do PHP.
+// SESSÃO - permite "lembrar" quem está logado entre uma página e outra.
 // A sessão guarda dados no servidor e liga esses dados ao navegador por um cookie.
 // AddDistributedMemoryCache: onde os dados da sessão ficam guardados (na memória do servidor).
 // ATENÇÃO: se você reiniciar a aplicação, todo mundo "perde o login".

@@ -1,12 +1,10 @@
 @*
     _Top.cshtml - BARRA SUPERIOR (botão do menu, usuário logado e mensagens).
-    Equivale ao config/top.php da versão PHP.
-
-    O nome da pessoa vem da SESSÃO: Context.Session.GetString(...)  (PHP: $_SESSION['nome_user']).
-    O Razor já faz o "HTML encode" de tudo que sai com @ (PHP: htmlspecialchars), então um nome
+    O nome da pessoa vem da SESSÃO: Context.Session.GetString(...).
+    O Razor já faz o "HTML encode" de tudo que sai com @, então um nome
     como <script> aparece como texto e não é executado.
 
-    "Log Out" aponta para a Action Acesso/Logout (PHP: logout.php).
+    "Log Out" aponta para a Action Acesso/Logout.
 *@
 <!-- top navigation -->
                     <div class="col-lg-12 col-md-12 top_nav">
