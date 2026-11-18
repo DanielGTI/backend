@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <partial name="_Head" />
+</head>
+
+@*
+    _Layout.cshtml - o MOLDE do painel (menu lateral + barra do topo + rodapé).
+
+    Na versão PHP, cada tela repetia este esqueleto e montava as peças com require_once:
+        require_once 'config/sidebar.php'; require_once 'config/top.php'; ...
+    No MVC o esqueleto fica em UM lugar só. Cada view escreve apenas o seu miolo, que é
+    encaixado no lugar do @RenderBody(). Por isso não existem mais as "cascas"
+    (produto.php, produto_unitario.php) separadas das "páginas" (pagina/*.php).
+
+    <partial name="..."/> inclui um pedaço de tela reaproveitável (PHP: require_once).
+*@
+<body class="nav-md">
+    <div class="body">
+        <div class="main_container container-fluid">
+            <div class="row">
+
+                <partial name="_Sidebar" />
+
+                <div class="col-lg-10 col-md-12 right_col_wrapper">
+                    <div class="row">
+
+                        <partial name="_Top" />
+
+                        @* Aqui entra o conteúdo da view atual (Home/Index, Produto/Index, Produto/Editar...) *@
+                        @RenderBody()
+
+                        <partial name="_Footer" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_Scripts" />
+
+    @* Seção opcional: uma view pode injetar scripts próprios AQUI, depois do jQuery já carregado. *@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

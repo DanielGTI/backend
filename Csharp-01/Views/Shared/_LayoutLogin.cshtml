@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <partial name="_Head" />
+</head>
+
+@*
+    _LayoutLogin.cshtml - molde SÓ da tela de login: sem menu, sem barra do topo, sem rodapé.
+    A view Acesso/Login escolhe este layout com:  Layout = "_LayoutLogin";
+    (No PHP, o login.php incluía só o header.php e escrevia o <body class="login"> sozinho.)
+*@
+<body class="login">
+    @RenderBody()
+</body>
+</html>

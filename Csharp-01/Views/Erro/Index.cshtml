@@ -1,0 +1,12 @@
+@* Views/Erro/Index.cshtml - tela exibida quando acontece um erro inesperado (fora do ambiente Development). *@
+@{
+    ViewData["Title"] = "Erro";
+    Layout = "_LayoutLogin"; // layout simples, sem menu: o erro pode ocorrer até para quem não está logado
+}
+
+<div class="container text-center" style="margin-top: 80px;">
+    <h1 class="text-danger">Erro.</h1>
+    <h2 class="text-danger">Ocorreu um erro ao processar a sua requisição.</h2>
+    <p><strong>Request ID:</strong> <code>@ViewData["RequestId"]</code></p>
+    <p><a asp-controller="Home" asp-action="Index">Voltar para o início</a></p>
+</div>

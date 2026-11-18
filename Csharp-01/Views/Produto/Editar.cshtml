@@ -1,0 +1,161 @@
+@*
+    Views/Produto/Editar.cshtml - formulário de edição (PHP: produto_unitario.php + pagina/editar_produto.php).
+
+    @model Produto? = recebe UM produto. O "?" permite null, que acontece quando o id não existe
+    (o Controller devolve View(null)) - nesse caso mostramos "Produto não encontrado".
+
+    TAG HELPERS do formulário (a grande diferença para o PHP):
+      asp-for="Marca"  => gera name="Marca", id="Marca" e value="<valor atual>" automaticamente.
+                          No PHP era:  value="<?= htmlspecialchars($produto['marca']) ?>"
+      <select asp-items> => gera as <option> e já marca como selected a opção igual ao valor atual.
+                          No PHP era um foreach com  $produto['ram'] === $opcao ? ' selected' : ''
+*@
+@model Produto?
+@{
+    ViewData["Title"] = "Editar Produto";
+}
+
+<!-- page content -->
+<div class="col-lg-12 col-md-12 right_col" role="main">
+    <div class="">
+        <div class="page-title row">
+            <div class="col-sm-6 col-12 text-left">
+                <h3>Editar Produto</h3>
+            </div>
+
+            <div class="col-sm-6 col-12 text-right">
+                <div class="row">
+                    <div class="offset-xl-7 col-xl-5 col-lg-12 col-md-12 col-sm-5 col-12 form-group pull-right top_search mt-3">
+                        <a asp-controller="Produto" asp-action="Index" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left"></i> Voltar para Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Informações do Produto</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+
+                        @* ERROS DE VALIDAÇÃO: o Controller devolve esta view com ModelState preenchido
+                           (PHP: lista vinda de $_GET['erros']). Só aparece se houver erro. *@
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Corrija os campos abaixo:</strong>
+                                <ul class="mb-0">
+                                    @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@erro.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        @if (Model is null)
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                Produto não encontrado. <a asp-controller="Produto" asp-action="Index">Voltar para a lista</a>.
+                            </div>
+                        }
+                        else
+                        {
+                            @* method="post" + asp-action="Editar" => POST /Produto/Editar
+                               O token anti-CSRF é inserido automaticamente. *@
+                            <form id="editarProdutoForm" asp-controller="Produto" asp-action="Editar" method="post" class="form-horizontal form-label-left">
+
+                                @* Campo escondido: leva o Id do produto no POST (PHP: <input type="hidden" name="id">) *@
+                                <input type="hidden" asp-for="Id" />
+
+                                <div class="item form-group">
+                                    <label asp-for="Marca" class="col-form-label col-md-3 col-sm-3 label-align">Marca <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input asp-for="Marca" required class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="Modelo" class="col-form-label col-md-3 col-sm-3 label-align">Modelo <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input asp-for="Modelo" required class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="Ram" class="col-form-label col-md-3 col-sm-3 label-align">RAM <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <select asp-for="Ram" asp-items="@(new SelectList(Produto.OpcoesRam))" required class="form-control">
+                                            <option value="">Selecione a RAM</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="DataLancamento" class="col-form-label col-md-3 col-sm-3 label-align">Data de Lançamento <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        @* [DataType(Date)] no Model faz este input virar type="date" sozinho *@
+                                        <input asp-for="DataLancamento" required class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="Cameras" class="col-form-label col-md-3 col-sm-3 label-align">Câmeras <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input asp-for="Cameras" required class="form-control" placeholder="Ex: Tripla: 48MP + 12MP + 12MP" />
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="Armazenamento" class="col-form-label col-md-3 col-sm-3 label-align">Armazenamento <span class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <select asp-for="Armazenamento" asp-items="@(new SelectList(Produto.OpcoesArmazenamento))" required class="form-control">
+                                            <option value="">Selecione o Armazenamento</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="item form-group">
+                                    <label asp-for="Descricao" class="col-form-label col-md-3 col-sm-3 label-align">Descrição</label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <textarea asp-for="Descricao" class="form-control" rows="3" placeholder="Descrição opcional do produto"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="ln_solid"></div>
+                                <div class="item form-group">
+                                    <div class="col-md-6 col-sm-6 offset-md-3">
+                                        <a asp-controller="Produto" asp-action="Index" class="btn btn-primary">Cancelar</a>
+                                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /page content -->

@@ -1,0 +1,11 @@
+@*
+    _ViewImports.cshtml - "imports" comuns a TODAS as views.
+    Evita repetir @using em cada arquivo .cshtml.
+*@
+@using Csharp_01
+@using Csharp_01.Models
+@using Csharp_01.Filters
+@using Microsoft.AspNetCore.Http
+@* Habilita os TAG HELPERS: atributos como asp-controller, asp-action e asp-for,
+   que o servidor transforma em HTML comum (links, formulários, campos...). *@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
