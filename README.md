@@ -377,8 +377,10 @@ Observações encontradas ao ler o código. Elas ajudam a entender o estado atua
 3. **Um bloco de conteúdo do template está comentado.**
    Dentro do `_Layout.cshtml`, o trecho `<!-- page content ... /page content -->` contém o exemplo da "Plain Page" do template. Ele está comentado, e logo abaixo vem o `@RenderBody()`. Foi uma forma de guardar o modelo de como montar uma página dentro do painel.
 
-4. **Pastas `bin/` e `obj/` estão no controle de versão (Git).**
-   Elas são geradas automaticamente a cada compilação e **não deveriam** ser versionadas, pois causam conflitos entre máquinas. Recomenda-se criar um `.gitignore` para projetos .NET (o Visual Studio oferece isso em *Git > Configurações > Arquivos de ignorar*, ou use o modelo "VisualStudio" do GitHub) e remover essas pastas do Git com `git rm -r --cached Csharp-01/bin Csharp-01/obj`.
+4. **`bin/` e `obj/` não são versionadas (`.gitignore`).**
+   Essas pastas são geradas automaticamente a cada compilação e causam conflitos entre máquinas, por isso o `.gitignore` da raiz as ignora, junto com as preferências pessoais do Visual Studio (`.vs/`, `*.user`), pacotes NuGet, logs, arquivos de publicação e segredos (`secrets.json`, `.env`, `*.pfx`). Quem clonar o projeto gera tudo de novo ao compilar (F5). Continuam versionados: código, `Pages/`, `wwwroot/` (inclusive `wwwroot/lib`), `launchSettings.json` e `appsettings.json`.
+
+   > **Atenção:** um `.gitignore` só vale para arquivos que **ainda não** foram commitados. Se um arquivo gerado já estiver rastreado, remova-o do controle sem apagá-lo do disco: `git rm -r --cached caminho/do/arquivo`.
 
 5. **Arquivos duplicados em `wwwroot`.**
    Existem dois conjuntos de bibliotecas: os do **template** (`wwwroot/css`, `wwwroot/js`) e os **padrão do Visual Studio** (`wwwroot/lib`). Como o `_Layout` ativo só usa os do template, o `wwwroot/lib` hoje só é usado pelo `_Layout2`.

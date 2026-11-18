@@ -1,0 +1,112 @@
+# =====================================================================
+#  .gitignore - projeto C# / ASP.NET Core (.NET 8) no Visual Studio
+#
+#  Regra de ouro: versione apenas o que VOCÊ escreve (código, views, configurações,
+#  wwwroot). NÃO versione o que a máquina GERA (compilação, pacotes, cache, arquivos pessoais).
+#  Quem clonar o repositório gera tudo de novo ao compilar (F5 / dotnet build).
+# =====================================================================
+
+# --- Resultado da compilação ------------------------------------------
+# bin/ = executáveis (.dll, .exe, .pdb)   obj/ = arquivos intermediários da compilação.
+# Mudam a cada build e geram conflitos entre máquinas.
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Ww][Ii][Nn]32/
+bld/
+
+# --- Arquivos pessoais do Visual Studio --------------------------------
+# .vs/ = cache e índices do IntelliSense (pesado e específico da sua máquina)
+.vs/
+# *.user = preferências pessoais (ex.: perfil de execução escolhido, escopos do scaffolding)
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.vsidx
+*.vsp
+*.vspx
+*.sap
+
+# --- Outras IDEs --------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*~
+
+# --- Logs, dumps e testes -----------------------------------------------
+*.log
+*.dmp
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+coverage*.json
+coverage*.xml
+*.coverage
+*.coveragexml
+.axoCover/
+
+# --- Pacotes NuGet --------------------------------------------------------
+# Os pacotes são baixados de novo pelo "restore"; não precisam estar no repositório.
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+.nuget/
+# Caso o projeto passe a usar npm/Node:
+node_modules/
+
+# --- Publicação (Build > Publicar) ---------------------------------------
+[Pp]ublish/
+PublishScripts/
+*.[Pp]ublish.xml
+*.pubxml
+*.pubxml.user
+*.azurePubxml
+*.publishproj
+
+# --- Cache de ferramentas ----------------------------------------------------
+.dotnet/
+.vs-config/
+*.tmp
+*_i.c
+*_p.c
+*.pch
+*.ilk
+*.obj
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
+*.cache
+ScaffoldingReadMe.txt
+
+# --- SEGREDOS: nunca versione ------------------------------------------------
+# Senhas, chaves e connection strings reais NÃO podem ir para o Git.
+# Em desenvolvimento use "User Secrets" (botão direito no projeto > Gerenciar Segredos do Usuário).
+secrets.json
+*.pfx
+*.key
+.env
+.env.*
+appsettings.Production.json
+appsettings.*.local.json
+
+# --- Sistema operacional --------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
